@@ -4,16 +4,11 @@ import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
-import com.github.kyuubiran.ezxhelper.init.EzXHelperInit
 import de.robv.android.xposed.*
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam
 import kotlin.collections.HashSet
 
-class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
-
-    override fun initZygote(startupParam: IXposedHookZygoteInit.StartupParam) {
-        EzXHelperInit.initZygote(startupParam)
-    }
+class XposedInit : IXposedHookLoadPackage {
 
     override fun handleLoadPackage(lpparam: LoadPackageParam) {
         val mPkgName = lpparam.packageName
@@ -35,10 +30,14 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
     }
 }
 
-
 val miuiApps = HashSet<String>(
     listOf(
+        "android",
         "com.android.providers.downloads.ui",
-        "com.android.fileexplorer"
+        "com.android.fileexplorer",
+        "com.miui.cloudservice",
+        "com.miui.notes",
+        "com.miui.gallery",
+
     )
 )

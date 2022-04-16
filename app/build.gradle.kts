@@ -74,9 +74,11 @@ android {
             }
         }
     }
+    androidResources.additionalParameters("--allow-reserved-package-id", "--package-id", "0x64")
     namespace = "com.yuk.miuidialog"
 }
 
 dependencies {
     compileOnly("de.robv.android.xposed:api:82")
+    implementation("com.github.kyuubiran:EzXHelper:0.8.0")
 }

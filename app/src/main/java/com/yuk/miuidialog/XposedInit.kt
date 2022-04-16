@@ -11,7 +11,6 @@ import com.github.kyuubiran.ezxhelper.init.EzXHelperInit
 import com.github.kyuubiran.ezxhelper.init.InitFields.moduleRes
 import de.robv.android.xposed.*
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam
-import kotlin.collections.HashSet
 
 class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 
@@ -47,13 +46,15 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
 val miuiApps = HashSet<String>(
     listOf(
         "android",
+        "com.android.fileexplorer",
         "com.android.nfc",
         "com.android.providers.downloads.ui",
-        "com.android.fileexplorer",
+        "com.android.settings",
+        "com.miui.cleanmaster",
         "com.miui.cloudservice",
-        "com.miui.notes",
         "com.miui.gallery",
         "com.miui.mishare.connectivity",
-
+        "com.miui.notes",
+        "com.xiaomi.misettings",
     )
 )

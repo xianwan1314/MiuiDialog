@@ -9,7 +9,13 @@ import android.view.WindowManager
 import android.widget.FrameLayout
 import com.github.kyuubiran.ezxhelper.init.EzXHelperInit
 import com.github.kyuubiran.ezxhelper.init.InitFields.moduleRes
-import de.robv.android.xposed.*
+import com.github.kyuubiran.ezxhelper.utils.findAllMethods
+import com.github.kyuubiran.ezxhelper.utils.findField
+import com.github.kyuubiran.ezxhelper.utils.hookAfter
+import com.github.kyuubiran.ezxhelper.utils.isPrivate
+import de.robv.android.xposed.IXposedHookLoadPackage
+import de.robv.android.xposed.IXposedHookZygoteInit
+import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam
 
 class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
@@ -19,26 +25,26 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
     }
 
     override fun handleLoadPackage(lpparam: LoadPackageParam) {
+        EzXHelperInit.initHandleLoadPackage(lpparam)
         val mPkgName = lpparam.packageName
-        val isMiuiApp = mPkgName.startsWith("com.miui") || mPkgName.startsWith("com.xiaomi") || miuiApps.contains(mPkgName)
+        val isMiuiApps = mPkgName.startsWith("com.miui") || mPkgName.startsWith("com.xiaomi") || miuiApps.contains(mPkgName)
         fun isDarkMode(context: Context): Boolean = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-        if (isMiuiApp) {
-            val dialogCls = XposedHelpers.findClassIfExists("miuix.appcompat.app.AlertController", lpparam.classLoader)
-            XposedBridge.hookAllMethods(dialogCls, "setupDialogPanel", object : XC_MethodHook() {
-                override fun afterHookedMethod(param: MethodHookParam) {
-                    if (dialogCls != null) {
-                        val context = AndroidAppHelper.currentApplication().applicationContext
-                        val mParentPanel = XposedHelpers.getObjectField(param.thisObject, "mParentPanel") as View
-                        val layoutParams = mParentPanel.layoutParams as FrameLayout.LayoutParams
-                        layoutParams.gravity = Gravity.BOTTOM
-                        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
-                        layoutParams.marginEnd = 0
-                        layoutParams.marginStart = 0
-                        mParentPanel.layoutParams = layoutParams
-                        mParentPanel.background = if (isDarkMode(context)) moduleRes.getDrawable(R.drawable.dialog_background_night) else moduleRes.getDrawable(R.drawable.dialog_background)
-                    }
-                }
-            })
+        if (isMiuiApps) {
+            findAllMethods("miuix.appcompat.app.AlertController", lpparam.classLoader) {
+                isPrivate && parameterCount == 1 && parameterTypes[0] == Configuration::class.java && returnType == Void.TYPE
+            }.hookAfter {
+                val context = AndroidAppHelper.currentApplication().applicationContext
+                val dialogCls = XposedHelpers.findClass("miuix.internal.widget.DialogParentPanel", lpparam.classLoader)
+                val f = findField("miuix.appcompat.app.AlertController", lpparam.classLoader) { type == dialogCls }
+                val mParentPanel = f.get(it.thisObject) as View
+                val layoutParams = mParentPanel.layoutParams as FrameLayout.LayoutParams
+                layoutParams.gravity = Gravity.BOTTOM
+                layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
+                layoutParams.marginEnd = 0
+                layoutParams.marginStart = 0
+                mParentPanel.layoutParams = layoutParams
+                mParentPanel.background = if (isDarkMode(context)) moduleRes.getDrawable(R.drawable.dialog_background_night) else moduleRes.getDrawable(R.drawable.dialog_background)
+            }
         }
     }
 }

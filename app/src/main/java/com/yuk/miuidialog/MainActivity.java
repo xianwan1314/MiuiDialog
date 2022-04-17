@@ -33,7 +33,10 @@ public class MainActivity extends Activity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs_main);
             mSharedPreferences = PrefsUtils.mSharedPreferences;
+            findPreference("prefs_key_various_dialog_gravity").setOnPreferenceChangeListener((preference, o) -> {
+                findPreference("prefs_key_various_dialog_bottom_margin").setEnabled("2".equals(o));
+                return true;
+            });
         }
     }
-
 }

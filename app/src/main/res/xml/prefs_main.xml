@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.yuk.miuidialog.view.ListPreferenceEx
+        android:title="@string/app_name"
+        android:key="various_dialog_gravity"
+        android:entries="@array/dialog_gravity"
+        android:entryValues="@array/dialog_gravity_value"
+        android:defaultValue="0"
+        app:valueAsSummary="true"/>
+
+    <com.yuk.miuidialog.view.SeekBarPreference
+        android:title="弹窗垂直边距"
+        android:key="various_dialog_horizontal_margin"
+        android:defaultValue="0"
+        app:minValue="0"
+        app:maxValue="100"
+        app:stepValue="1"
+        app:format="%d dp"
+        app:offtext="默认"/>
+
+    <com.yuk.miuidialog.view.SeekBarPreference
+        android:title="弹窗底部边距"
+        android:key="various_dialog_bottom_margin"
+        android:defaultValue="0"
+        app:minValue="0"
+        app:maxValue="100"
+        app:stepValue="1"
+        app:format="%d dp"
+        app:offtext="默认"/>
+
+
+</PreferenceScreen>

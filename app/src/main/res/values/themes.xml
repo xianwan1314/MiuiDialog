@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget" />
+    <style name="Widget.PreferenceItem">
+        <item name="android:paddingVertical">@dimen/preference_item_padding_inner</item>
+        <item name="android:paddingHorizontal">@dimen/preference_item_child_padding</item>
+    </style>
+</resources>

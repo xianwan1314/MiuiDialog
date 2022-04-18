@@ -11,7 +11,7 @@
       android:resource="@array/xposed_scope" />
     <meta-data
       android:name="xposeddescription"
-      android:value="Miui底部Dialog" />
+      android:value="重新让 MiuiDialog 置底" />
     <meta-data
       android:name="xposedminversion"
       android:value="93" />

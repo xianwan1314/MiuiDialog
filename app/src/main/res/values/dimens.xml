@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="preference_item_child_padding">25dp</dimen>
-    <dimen name="preference_item_padding_inner">15dp</dimen>
-    <dimen name="preference_summary_padding_right">15dp</dimen>
-</resources>
